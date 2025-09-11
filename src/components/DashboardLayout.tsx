@@ -6,15 +6,17 @@ import { useIsMobile } from "@/hooks/use-mobile";
 
 interface DashboardLayoutProps {
   children: React.ReactNode;
+  title?: string;
+  subtitle?: string;
 }
 
-const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
+const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children, title, subtitle }) => {
   const isMobile = useIsMobile();
 
   if (isMobile) {
     return (
       <div className="flex min-h-screen w-full flex-col bg-muted/40">
-        <Header />
+        <Header title={title} subtitle={subtitle} />
         <main className="flex-1 p-4 sm:p-6">{children}</main>
       </div>
     );
@@ -23,7 +25,12 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({ children }) => {
   return (
     <div className="flex h-screen overflow-hidden bg-background">
       <Sidebar />
-      <main className="flex-1 overflow-y-auto p-6">{children}</main>
+      <div className="flex flex-1 flex-col overflow-hidden">
+        <Header title={title} subtitle={subtitle} />
+        <main className="flex-1 overflow-y-auto">
+          {children}
+        </main>
+      </div>
       <AISidebar />
     </div>
   );

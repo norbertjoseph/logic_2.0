@@ -3,10 +3,8 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const Quality = () => {
   return (
-    <DashboardLayout>
+    <DashboardLayout title="Quality">
       <div className="flex-1 p-6 bg-white">
-        <h1 className="text-3xl font-bold mb-6">Quality</h1>
-
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
           <Card>
             <CardHeader>
