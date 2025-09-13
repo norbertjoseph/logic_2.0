@@ -10,6 +10,9 @@ interface AIInsight {
     cost_impact?: string;
   };
   priority: number;
+  subtitle?: string;
+  icon?: React.ElementType;
+  tag?: string;
 }
 
 interface AIInsightsContextType {
