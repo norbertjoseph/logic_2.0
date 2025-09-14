@@ -18,11 +18,20 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Separator } from "@/components/ui/separator";
 
 // --- CEO Dashboard Code ---
-const ceoProductionInsights = [
-  { type: "Cross-Region Pattern Detection", subtitle: "Revenue Alert", message: "Material wastage is 12% above average in 3 regions. Implement centralized drying protocol to save ₹12L/month.", recommendation: "View Details", priority: 2, icon: TrendingDown, tag: "high", confidence: 0.91, impact_estimate: {} },
-  { type: "Capacity Bottleneck Forecast", subtitle: "Business Risk", message: "East region will hit capacity limit in 7 weeks. Consider load balancing to West region (85% utilized).", recommendation: "Take Action", priority: 1, icon: AlertTriangle, tag: "critical", confidence: 0.97, impact_estimate: {} },
-  { type: "Energy Optimization Opportunity", subtitle: "Cost Optimization", message: "Shift 11% production to night shift across regions to save ₹9.5L/month on electricity.", recommendation: "See Action", priority: 3, icon: Zap, tag: "medium", confidence: 0.94, impact_estimate: {} },
-];
+const generateCeoInsights = (dayOffset: number) => {
+    const randomFactor = 1 - dayOffset * 0.1;
+    return [
+        { type: "Cross-Region Pattern Detection", subtitle: "Revenue Alert", message: `Material wastage is ${(12 * randomFactor).toFixed(0)}% above average in 3 regions. Implement centralized drying protocol to save ₹${(12 * randomFactor).toFixed(1)}L/month.`, recommendation: "View Details", priority: 2, icon: TrendingDown, tag: "high", confidence: 0.91 * randomFactor, impact_estimate: {} },
+        { type: "Capacity Bottleneck Forecast", subtitle: "Business Risk", message: `East region will hit capacity limit in ${(7 / randomFactor).toFixed(0)} weeks. Consider load balancing to West region (85% utilized).`, recommendation: "Take Action", priority: 1, icon: AlertTriangle, tag: "critical", confidence: 0.97 * randomFactor, impact_estimate: {} },
+        { type: "Energy Optimization Opportunity", subtitle: "Cost Optimization", message: `Shift ${(11 * randomFactor).toFixed(0)}% production to night shift across regions to save ₹${(9.5 * randomFactor).toFixed(1)}L/month on electricity.`, recommendation: "See Action", priority: 3, icon: Zap, tag: "medium", confidence: 0.94 * randomFactor, impact_estimate: {} },
+    ];
+};
+
+const allCeoInsights = {
+    today: generateCeoInsights(0),
+    yesterday: generateCeoInsights(1),
+    '2daysAgo': generateCeoInsights(2),
+};
 
 const generateCeoData = (dayOffset: number) => {
   const randomFactor = 1 - dayOffset * 0.05;
@@ -343,12 +352,21 @@ const CeoProductionDashboard = () => {
 
 // --- Plant Manager Dashboard Code ---
 
-const plantManagerInsights = [
-    { type: "Quality Degradation Detected", subtitle: "Quality Prediction", message: "PLANT_S1 showing dimensional issues. Schedule tool calibration within 24 hours to prevent 12% scrap increase.", recommendation: "View Details", priority: 1, icon: AlertTriangle, tag: "critical", confidence: 0.96, impact_estimate: { cost_impact: "₹2.4L potential scrap cost", potential_gain: "₹2.4L savings with immediate action" } },
-    { type: "Preventive Maintenance Window", subtitle: "Maintenance Optimizer", message: "PLANT_S1 with 13 machines - schedule PM during shift C changeover. Saves 3 hours downtime.", recommendation: "Take Action", priority: 2, icon: Wrench, tag: "high", confidence: 0.92, impact_estimate: { potential_gain: "3 hours downtime savings", cost_impact: "₹1.8L potential loss" } },
-    { type: "Material Alert - PLANT_S1", subtitle: "Inventory Alert", message: "Black ABS moisture content above spec. Contact warehouse immediately.", recommendation: "View Details", priority: 1, icon: AlertTriangle, tag: "critical", confidence: 0.99, impact_estimate: { cost_impact: "₹5.2L batch at risk", potential_gain: "Full batch recovery possible" } },
-    { type: "Process Optimization - PLANT_S1", subtitle: "Operator Guidance", message: "Material drying protocol needed for humidity control. Historical success rate: 86%.", recommendation: "Take Action", priority: 3, icon: CheckCircle2, tag: "medium", confidence: 0.87, impact_estimate: { potential_gain: "12% yield improvement", cost_impact: "₹800K monthly opportunity" } },
-];
+const generatePlantManagerInsights = (dayOffset: number) => {
+    const randomFactor = 1 - dayOffset * 0.1;
+    return [
+        { type: "Quality Degradation Detected", subtitle: "Quality Prediction", message: `PLANT_S1 showing dimensional issues. Schedule tool calibration within 24 hours to prevent ${(12 * randomFactor).toFixed(0)}% scrap increase.`, recommendation: "View Details", priority: 1, icon: AlertTriangle, tag: "critical", confidence: 0.96 * randomFactor, impact_estimate: { potential_gain: `₹${(2.5 * randomFactor).toFixed(1)}L`, cost_impact: `₹${(1.8 * randomFactor).toFixed(1)}L` } },
+        { type: "Preventive Maintenance Window", subtitle: "Maintenance Optimizer", message: `PLANT_S1 with 13 machines - schedule PM during shift C changeover. Saves ${(3 * randomFactor).toFixed(0)} hours downtime.`, recommendation: "Take Action", priority: 2, icon: Wrench, tag: "high", confidence: 0.92 * randomFactor, impact_estimate: { potential_gain: `${(3 * randomFactor).toFixed(0)} hours`, cost_impact: `₹${(0.8 * randomFactor).toFixed(1)}L` } },
+        { type: "Material Alert - PLANT_S1", subtitle: "Inventory Alert", message: "Black ABS moisture content above spec. Contact warehouse immediately.", recommendation: "View Details", priority: 1, icon: AlertTriangle, tag: "critical", confidence: 0.99 * randomFactor, impact_estimate: { potential_gain: "Quality improvement", cost_impact: `₹${(1.2 * randomFactor).toFixed(1)}L` } },
+        { type: "Process Optimization - PLANT_S1", subtitle: "Operator Guidance", message: "Material drying protocol needed for humidity control. Historical success rate: 86%.", recommendation: "Take Action", priority: 3, icon: CheckCircle2, tag: "medium", confidence: 0.87 * randomFactor, impact_estimate: { potential_gain: "86% success rate", cost_impact: `₹${(0.5 * randomFactor).toFixed(1)}L` } },
+    ];
+};
+
+const allPlantManagerInsights = {
+    today: generatePlantManagerInsights(0),
+    yesterday: generatePlantManagerInsights(1),
+    '2daysAgo': generatePlantManagerInsights(2),
+};
 
 const generatePlantData = (role: Role, dayOffset: number) => {
     const multipliers: Record<string, number> = {
@@ -732,15 +750,16 @@ const PlantManagerProductionDashboard = ({ role }: { role: Role }) => {
 const Production = () => {
   const { setInsights } = useAIInsights();
   const { currentRole } = useRole();
+  const { selectedDate } = useDate();
 
   useEffect(() => {
     if (currentRole === 'ceo') {
-      setInsights(ceoProductionInsights);
+      setInsights(allCeoInsights[selectedDate]);
     } else {
-      setInsights(plantManagerInsights);
+      setInsights(allPlantManagerInsights[selectedDate]);
     }
     return () => setInsights([]);
-  }, [setInsights, currentRole]);
+  }, [setInsights, currentRole, selectedDate]);
 
   return (
     <DashboardLayout title="Production" subtitle="Real-time manufacturing dashboard for comprehensive production oversight">

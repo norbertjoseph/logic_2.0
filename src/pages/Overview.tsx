@@ -1,15 +1,31 @@
 "use client";
 
-import React from "react";
+import React, { useEffect } from "react";
 import DashboardLayout from "@/components/DashboardLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useDate } from "@/context/DateContext";
+import { useAIInsights } from "@/context/AIInsightsContext";
 import { 
   BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, LineChart, Line
 } from "recharts";
 import { 
-  Clock, Settings, ShieldCheck, Target, TrendingUp, TrendingDown
+  Clock, Settings, ShieldCheck, Target, TrendingUp, TrendingDown, Zap, AlertTriangle
 } from "lucide-react";
+
+const generateOverviewInsights = (dayOffset: number) => {
+    const randomFactor = 1 - dayOffset * 0.1;
+    return [
+        { type: "OEE Trend Anomaly", subtitle: "Performance Alert", message: `Overall OEE has dropped ${(4 * (1 + dayOffset * 0.2)).toFixed(1)}% in the last 8 hours, driven by a sharp increase in machine breakdowns.`, recommendation: "Investigate Downtime", priority: 1, icon: AlertTriangle, tag: "critical", confidence: 0.95 * randomFactor, impact_estimate: {} },
+        { type: "Energy Consumption Spike", subtitle: "Cost Optimization", message: `Energy usage is ${(15 * randomFactor).toFixed(0)}% above baseline during peak hours. Shifting non-critical processes could save ₹${(2.1 * randomFactor).toFixed(1)}L/month.`, recommendation: "Analyze Energy Use", priority: 2, icon: Zap, tag: "high", confidence: 0.89 * randomFactor, impact_estimate: {} },
+        { type: "Quality vs. Speed Correlation", subtitle: "Strategic Insight", message: `Analysis shows a ${(7 * randomFactor).toFixed(0)}% quality drop when production speed exceeds 90% capacity. Consider process recalibration.`, recommendation: "View Correlation", priority: 3, icon: TrendingUp, tag: "medium", confidence: 0.85 * randomFactor, impact_estimate: {} },
+    ];
+};
+
+const allInsights = {
+    today: generateOverviewInsights(0),
+    yesterday: generateOverviewInsights(1),
+    '2daysAgo': generateOverviewInsights(2),
+};
 
 const generateData = (dayOffset: number) => {
   const randomFactor = (1 - dayOffset * 0.05);
@@ -48,8 +64,14 @@ const allData = {
 };
 
 const Overview = () => {
+  const { setInsights } = useAIInsights();
   const { selectedDate } = useDate();
   const { kpiData, oeeTrendData, lossReasonsData, scrapData } = allData[selectedDate];
+
+  useEffect(() => {
+    setInsights(allInsights[selectedDate]);
+    return () => setInsights([]);
+  }, [setInsights, selectedDate]);
 
   return (
     <DashboardLayout title="Overview">

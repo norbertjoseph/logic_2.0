@@ -1,12 +1,29 @@
 "use client";
 
+import React, { useEffect } from "react";
 import DashboardLayout from "@/components/DashboardLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { TrendingUp, TrendingDown, Activity } from "lucide-react";
+import { TrendingUp, TrendingDown, Activity, Wrench, AlertTriangle, BarChartHorizontal } from "lucide-react";
 import { useDate } from "@/context/DateContext";
+import { useAIInsights } from "@/context/AIInsightsContext";
 import {
   BarChart, Bar, LineChart, Line, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid,
 } from "recharts";
+
+const generateAssemblyReconInsights = (dayOffset: number) => {
+    const randomFactor = 1 - dayOffset * 0.1;
+    return [
+        { type: "Station 4 Bottleneck", subtitle: "Efficiency Alert", message: `Station 4 cycle time is ${(22 * (1 + dayOffset * 0.1)).toFixed(0)}% higher than others, causing a line imbalance. Potential for 8% throughput increase.`, recommendation: "Analyze Station 4", priority: 1, icon: AlertTriangle, tag: "critical", confidence: 0.97 * randomFactor, impact_estimate: {} },
+        { type: "Predictive Maintenance", subtitle: "Maintenance Advisory", message: `Vibration sensors on Station 2's robotic arm show wear patterns. Schedule maintenance in ${(48 / (1 + dayOffset * 0.1)).toFixed(0)}h to prevent failure.`, recommendation: "Schedule Maintenance", priority: 2, icon: Wrench, tag: "high", confidence: 0.91 * randomFactor, impact_estimate: {} },
+        { type: "Rework Rate Pattern", subtitle: "Quality Insight", message: `A high rework rate is correlated with new operator shifts. Additional training could reduce rework by ${(30 * randomFactor).toFixed(0)}%.`, recommendation: "Review Training Data", priority: 3, icon: BarChartHorizontal, tag: "medium", confidence: 0.86 * randomFactor, impact_estimate: {} },
+    ];
+};
+
+const allAssemblyReconInsights = {
+    today: generateAssemblyReconInsights(0),
+    yesterday: generateAssemblyReconInsights(1),
+    '2daysAgo': generateAssemblyReconInsights(2),
+};
 
 const generateData = (dayOffset: number) => {
   const randomFactor = 1 - dayOffset * 0.02;
@@ -37,8 +54,14 @@ const allData = {
 };
 
 const AssemblyRecon = () => {
+  const { setInsights } = useAIInsights();
   const { selectedDate } = useDate();
   const { kpiData, stationEfficiencyData, stationUtilizationData } = allData[selectedDate];
+
+  useEffect(() => {
+    setInsights(allAssemblyReconInsights[selectedDate]);
+    return () => setInsights([]);
+  }, [setInsights, selectedDate]);
 
   return (
     <DashboardLayout title="Assembly Recon" subtitle="Monitor assembly line performance, track operator efficiency, and manage quality">

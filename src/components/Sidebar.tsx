@@ -35,17 +35,16 @@ const Sidebar = () => {
   return (
     <aside className="w-64 bg-sidebar text-sidebar-foreground p-4 flex flex-col h-full border-r border-sidebar-border">
       <div className="mb-8 px-2">
-        <div className="flex items-center gap-2">
-          <div className="bg-black p-2 rounded-lg">
-            <svg width="24" height="24" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M50 0L100 28.87V86.6L50 115.47L0 86.6V28.87L50 0Z" fill="#4F46E5"/>
-              <path d="M50 23.09L83.3 42.03V79.9L50 98.84L16.7 79.9V42.03L50 23.09Z" fill="white"/>
-            </svg>
+        <div>
+          <div className="flex items-center">
+            <div className="relative inline-block pb-1">
+              <span className="text-xl font-bold text-gray-800">logic</span>
+              <span className="absolute left-0 bottom-0 w-full h-[2px] bg-orange-500" />
+            </div>
+            <div className="w-2 h-2 bg-orange-500 rounded-full mx-2"></div>
+            <span className="text-xl font-bold text-orange-500">leap</span>
           </div>
-          <div>
-            <h2 className="text-lg font-bold text-gray-800">Logic Leap</h2>
-            <p className="text-xs text-gray-500">Smart Manufacturing</p>
-          </div>
+          <p className="text-xs text-gray-500 mt-1">Smart Manufacturing</p>
         </div>
       </div>
       <nav className="flex-grow">

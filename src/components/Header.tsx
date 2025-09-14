@@ -1,6 +1,6 @@
 "use client";
 
-import { Menu, Bell, User } from "lucide-react";
+import { Menu, User } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import Sidebar from "./Sidebar";
@@ -76,9 +76,6 @@ const Header: React.FC<HeaderProps> = ({
             <SelectItem value="2daysAgo">2 days ago</SelectItem>
           </SelectContent>
         </Select>
-        <Button variant="ghost" size="icon">
-          <Bell className="h-5 w-5" />
-        </Button>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="flex items-center gap-2">

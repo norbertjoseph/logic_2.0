@@ -14,11 +14,20 @@ import {
   Monitor, Clock, TrendingDown, TrendingUp, Settings, AlertTriangle,
 } from "lucide-react";
 
-const downtimeInsights = [
-  { type: "Predictive Maintenance Window", subtitle: "Maintenance Intelligence", message: "Machine 3 shows early wear indicators. Schedule maintenance within 72 hours to prevent unplanned downtime.", recommendation: "Schedule Now", priority: 2, icon: TrendingUp, confidence: 0.85, impact_estimate: {} },
-  { type: "Setup Time Optimization", subtitle: "Process Improvement", message: "Changeover time can be reduced by 23% implementing quick-change tooling on Line 2.", recommendation: "View Analysis", priority: 3, icon: Settings, confidence: 0.92, impact_estimate: {} },
-  { type: "Material Flow Bottleneck", subtitle: "Operations Alert", message: "Material shortage pattern detected. Inventory buffer adjustment needed to prevent 2-hour downtime.", recommendation: "Take Action", priority: 1, icon: AlertTriangle, confidence: 0.98, impact_estimate: {} },
-];
+const generateDowntimeInsights = (dayOffset: number) => {
+    const randomFactor = 1 - dayOffset * 0.1;
+    return [
+        { type: "Predictive Maintenance Window", subtitle: "Maintenance Intelligence", message: `Machine 3 shows early wear indicators. Schedule maintenance within ${(72 / (1 + dayOffset * 0.1)).toFixed(0)} hours to prevent unplanned downtime.`, recommendation: "Schedule Now", priority: 2, icon: TrendingUp, confidence: 0.85 * randomFactor, impact_estimate: {} },
+        { type: "Setup Time Optimization", subtitle: "Process Improvement", message: `Changeover time can be reduced by ${(23 * randomFactor).toFixed(0)}% implementing quick-change tooling on Line 2.`, recommendation: "View Analysis", priority: 3, icon: Settings, confidence: 0.92 * randomFactor, impact_estimate: {} },
+        { type: "Material Flow Bottleneck", subtitle: "Operations Alert", message: `Material shortage pattern detected. Inventory buffer adjustment needed to prevent ${(2 * randomFactor).toFixed(1)}-hour downtime.`, recommendation: "Take Action", priority: 1, icon: AlertTriangle, confidence: 0.98 * randomFactor, impact_estimate: {} },
+    ];
+};
+
+const allDowntimeInsights = {
+    today: generateDowntimeInsights(0),
+    yesterday: generateDowntimeInsights(1),
+    '2daysAgo': generateDowntimeInsights(2),
+};
 
 const generateData = (dayOffset: number) => {
   const randomFactor = 1 - dayOffset * 0.05;
@@ -62,9 +71,9 @@ const DowntimeLosses = () => {
   const { productionData, machineData, reasonData, downtimeData } = allData[selectedDate];
 
   useEffect(() => {
-    setInsights(downtimeInsights);
+    setInsights(allDowntimeInsights[selectedDate]);
     return () => setInsights([]);
-  }, [setInsights]);
+  }, [setInsights, selectedDate]);
 
   return (
     <DashboardLayout title="Downtime & Losses" subtitle="Downtime analysis, loss tracking, and MTTR monitoring for operational efficiency">

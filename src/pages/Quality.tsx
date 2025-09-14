@@ -14,11 +14,20 @@ import {
   CheckCircle2, AlertTriangle, TrendingUp, TrendingDown, Zap, BarChartHorizontal
 } from "lucide-react";
 
-const qualityInsights = [
-  { type: "Regional Performance Pattern", subtitle: "Strategic Intelligence", message: "Updated every 5 minutes based on latest time patterns.", recommendation: "View Details", priority: 2, icon: BarChartHorizontal, tag: "high", confidence: 0.88, impact_estimate: {} },
-  { type: "Energy Optimization Opportunity", subtitle: "Cost Optimization", message: "Shift 14% production to night shift across regions to save ₹15.2L on electricity costs.", recommendation: "See Action", priority: 2, icon: Zap, tag: "high", confidence: 0.95, impact_estimate: {} },
-  { type: "Quality Degradation Alert", subtitle: "Risk Management", message: "19% dropping (2.5/week) in South region. Correlation with new supplier launch detected.", recommendation: "Investigate", priority: 1, icon: AlertTriangle, tag: "critical", confidence: 0.99, impact_estimate: {} },
-];
+const generateQualityInsights = (dayOffset: number) => {
+    const randomFactor = 1 - dayOffset * 0.1;
+    return [
+        { type: "Regional Performance Pattern", subtitle: "Strategic Intelligence", message: "Updated every 5 minutes based on latest time patterns.", recommendation: "View Details", priority: 2, icon: BarChartHorizontal, tag: "high", confidence: 0.88 * randomFactor, impact_estimate: {} },
+        { type: "Energy Optimization Opportunity", subtitle: "Cost Optimization", message: `Shift ${(14 * randomFactor).toFixed(0)}% production to night shift across regions to save ₹${(15.2 * randomFactor).toFixed(1)}L on electricity costs.`, recommendation: "See Action", priority: 2, icon: Zap, tag: "high", confidence: 0.95 * randomFactor, impact_estimate: {} },
+        { type: "Quality Degradation Alert", subtitle: "Risk Management", message: `${(19 * (1 + dayOffset * 0.1)).toFixed(0)}% dropping (${(2.5 * (1 + dayOffset * 0.1)).toFixed(1)}/week) in South region. Correlation with new supplier launch detected.`, recommendation: "Investigate", priority: 1, icon: AlertTriangle, tag: "critical", confidence: 0.99 * randomFactor, impact_estimate: {} },
+    ];
+};
+
+const allQualityInsights = {
+    today: generateQualityInsights(0),
+    yesterday: generateQualityInsights(1),
+    '2daysAgo': generateQualityInsights(2),
+};
 
 const generateData = (dayOffset: number) => {
   const randomFactor = 1 - dayOffset * 0.02;
@@ -52,9 +61,9 @@ const Quality = () => {
   const { kpiData, qualityTrendData, defectAnalysisData } = allData[selectedDate];
 
   useEffect(() => {
-    setInsights(qualityInsights);
+    setInsights(allQualityInsights[selectedDate]);
     return () => setInsights([]);
-  }, [setInsights]);
+  }, [setInsights, selectedDate]);
 
   return (
     <DashboardLayout title="Quality" subtitle="Quality control metrics and defect analysis">
