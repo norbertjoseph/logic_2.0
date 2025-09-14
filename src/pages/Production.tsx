@@ -141,20 +141,42 @@ const CeoProductionDashboard = () => {
 
         <div className="grid grid-cols-1 gap-6">
           <Card>
-            <CardHeader>
-              <div className="flex justify-between items-start">
-                <div><CardTitle className="flex items-center gap-2"><AlertTriangle className="h-4 w-4 text-red-500" />Downtime</CardTitle><p className="text-sm text-muted-foreground">Regional Impact</p></div>
-                <div className="text-right"><p className="text-xl font-bold">₹{data.kpi.downtimeCost}L</p><p className="text-xs text-muted-foreground">Total Cost Impact</p></div>
-                <div className="text-right"><p className="text-xl font-bold">{data.kpi.avgMttr}</p><p className="text-xs text-muted-foreground">Avg MTTR (min)</p></div>
-              </div>
+            <CardHeader className="pb-2">
+                <CardTitle className="text-base flex items-center gap-2">
+                    <AlertTriangle className="h-4 w-4 text-red-500" />Downtime
+                </CardTitle>
+                <CardDescription className="text-xs">Regional Impact</CardDescription>
             </CardHeader>
+            <CardContent className="grid grid-cols-2 gap-4 text-center pt-2">
+                <div>
+                    <p className="text-xl font-bold">₹{data.kpi.downtimeCost}L</p>
+                    <p className="text-xs text-muted-foreground">Total Cost</p>
+                </div>
+                <div>
+                    <p className="text-xl font-bold">{data.kpi.avgMttr}</p>
+                    <p className="text-xs text-muted-foreground">Avg MTTR</p>
+                </div>
+            </CardContent>
           </Card>
           <Card>
-            <CardHeader><CardTitle className="flex items-center gap-2"><DollarSign className="h-4 w-4 text-green-600" />Cost Impact Calculator</CardTitle></CardHeader>
-            <CardContent className="grid grid-cols-3 gap-4 text-center">
-              <div><p className="text-xl font-bold">₹{Math.round(data.kpi.todaysImpact / 1000)}k</p><p className="text-xs text-muted-foreground">Today's Impact</p></div>
-              <div><p className="text-xl font-bold">₹{data.kpi.monthlyProjection}L</p><p className="text-xs text-muted-foreground">Monthly Projection</p></div>
-              <div><p className="text-xl font-bold">₹{data.kpi.costPerMinute.toLocaleString()}</p><p className="text-xs text-muted-foreground">Cost per Minute</p></div>
+            <CardHeader className="pb-2">
+                <CardTitle className="text-base flex items-center gap-2">
+                    <DollarSign className="h-4 w-4 text-green-600" />Cost Impact Calculator
+                </CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-2 pt-2">
+                <div className="flex justify-between items-baseline">
+                    <p className="text-sm text-muted-foreground">Today's Impact</p>
+                    <p className="font-semibold">₹{Math.round(data.kpi.todaysImpact / 1000)}k</p>
+                </div>
+                <div className="flex justify-between items-baseline">
+                    <p className="text-sm text-muted-foreground">Monthly Projection</p>
+                    <p className="font-semibold">₹{data.kpi.monthlyProjection}L</p>
+                </div>
+                <div className="flex justify-between items-baseline">
+                    <p className="text-sm text-muted-foreground">Cost per Minute</p>
+                    <p className="font-semibold">₹{data.kpi.costPerMinute.toLocaleString()}</p>
+                </div>
             </CardContent>
           </Card>
         </div>

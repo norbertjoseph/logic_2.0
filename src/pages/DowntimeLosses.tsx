@@ -83,8 +83,27 @@ const DowntimeLosses = () => {
           <CardContent className="flex-grow"><ResponsiveContainer width="100%" height="100%"><AreaChart data={productionData} margin={{ top: 5, right: 20, left: -10, bottom: 0 }}><defs><linearGradient id="colorProduction" x1="0" y1="0" x2="0" y2="1"><stop offset="5%" stopColor="#10b981" stopOpacity={0.1}/><stop offset="95%" stopColor="#10b981" stopOpacity={0}/></linearGradient></defs><CartesianGrid strokeDasharray="3 3" vertical={false} /><XAxis dataKey="time" axisLine={false} tickLine={false} /><YAxis axisLine={false} tickLine={false} /><Tooltip /><Area type="monotone" dataKey="value" stroke="#10b981" strokeWidth={2} fill="url(#colorProduction)" /></AreaChart></ResponsiveContainer></CardContent>
         </Card>
         <Card className="col-span-1 row-span-1 flex flex-col h-full">
-          <CardHeader><CardTitle className="flex items-center gap-2"><Monitor className="h-5 w-5 text-blue-600" />Machine Performance</CardTitle></CardHeader>
-          <CardContent className="flex-grow flex flex-col"><div className="grid grid-cols-2 gap-4 flex-grow">{machineData.map((machine) => (<div key={machine.name} className="p-1 rounded-lg border text-center bg-slate-50 flex flex-col justify-center"><p className="font-medium text-gray-700 text-xs">{machine.name}</p><p className="text-lg font-bold text-blue-600">{machine.performance}%</p><Badge variant="outline" className={`text-xs ${machine.status === 'Warning' ? 'bg-yellow-100 text-yellow-800 border-yellow-200' : 'bg-green-100 text-green-800 border-green-200'}`}>{machine.status}</Badge></div>)) }</div><div className="flex justify-between text-sm mt-4 text-gray-600 shrink-0"><button className="font-semibold">Current Shift #2</button><button className="text-blue-600 font-semibold">All Machines</button></div></CardContent>
+          <CardHeader className="p-4 pb-2">
+            <CardTitle className="text-base font-semibold flex items-center gap-2">
+              <Monitor className="h-5 w-5 text-blue-600" />
+              Machine Performance
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="flex-grow flex flex-col justify-between p-4 pt-2">
+            <div className="grid grid-cols-2 gap-2">
+              {machineData.map((machine) => (
+                <div key={machine.name} className="p-2 rounded-lg border text-center bg-slate-50 flex flex-col justify-center items-center">
+                  <p className="font-medium text-gray-700 text-sm">{machine.name}</p>
+                  <p className="text-xl font-bold text-blue-600">{machine.performance}%</p>
+                  <Badge variant="outline" className={`text-xs px-2 py-0.5 ${machine.status === 'Warning' ? 'bg-yellow-100 text-yellow-800 border-yellow-200' : 'bg-green-100 text-green-800 border-green-200'}`}>{machine.status}</Badge>
+                </div>
+              ))}
+            </div>
+            <div className="flex justify-between text-sm text-gray-600">
+              <button className="font-semibold">Current Shift #2</button>
+              <button className="text-blue-600 font-semibold">All Machines</button>
+            </div>
+          </CardContent>
         </Card>
         <Card className="col-span-1 row-span-1 flex flex-col h-full">
           <CardHeader><CardTitle className="flex items-center gap-2"><Clock className="h-5 w-5 text-red-500" />Duration by Reason</CardTitle></CardHeader>
