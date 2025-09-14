@@ -1,11 +1,18 @@
 "use client";
 
-import { Menu, Search, Bell, User } from "lucide-react";
+import { Menu, Bell, User } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import Sidebar from "./Sidebar";
 import React from "react";
+import { useDate, DateFilter } from "@/context/DateContext";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface HeaderProps {
   title?: string;
@@ -16,6 +23,8 @@ const Header: React.FC<HeaderProps> = ({
   title = "Manufacturing Dashboard", 
   subtitle = "Real-time manufacturing dashboard for comprehensive production oversight" 
 }) => {
+  const { selectedDate, setSelectedDate } = useDate();
+
   return (
     <header className="sticky top-0 z-30 flex h-16 shrink-0 items-center justify-between gap-4 border-b bg-background px-4 sm:px-6">
       <div className="flex items-center gap-4">
@@ -39,14 +48,16 @@ const Header: React.FC<HeaderProps> = ({
       </div>
 
       <div className="flex flex-1 items-center gap-4 md:gap-6 justify-end">
-        <div className="relative flex-1 max-w-xs">
-          <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
-          <Input
-            type="search"
-            placeholder="Search anything..."
-            className="pl-8 w-full"
-          />
-        </div>
+        <Select value={selectedDate} onValueChange={(value) => setSelectedDate(value as DateFilter)}>
+          <SelectTrigger className="w-[180px]">
+            <SelectValue placeholder="Select a date" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="today">Today</SelectItem>
+            <SelectItem value="yesterday">Yesterday</SelectItem>
+            <SelectItem value="2daysAgo">2 days ago</SelectItem>
+          </SelectContent>
+        </Select>
         <Button variant="ghost" size="icon">
           <Bell className="h-5 w-5" />
         </Button>
