@@ -1,92 +1,59 @@
-import DashboardLayout from "@/components/DashboardLayout";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import React from 'react';
+import KPICard from '../components/KPICard';
+import ChartCard from '../components/ChartCard';
+import NotesSection from '../components/NotesSection';
+import UtilizationChart from '../components/UtilizationChart';
+import AlertList from '../components/AlertList';
+import { FaTasks, FaBullseye, FaExclamationCircle, FaChartPie } from 'react-icons/fa';
+import { utilizationData, clashAlerts } from '../mockData';
+import DashboardLayout from '@/components/DashboardLayout';
 
-const Scheduler = () => {
+const SchedulerDashboard: React.FC = () => {
   return (
-    <DashboardLayout title="Scheduler">
-      <div className="flex-1 p-6 bg-white">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Constraint-aware Plan</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <ul className="list-disc list-inside space-y-1">
-                <li>Machines</li>
-                <li>Molds</li>
-                <li>Changeovers</li>
-                <li>Crew</li>
-                <li>Material & QC locks</li>
-              </ul>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Scenario Planning</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <ul className="list-disc list-inside space-y-1">
-                <li>Holiday surge</li>
-                <li>Overtime</li>
-                <li>Subcontract</li>
-                <li>Compare A/B</li>
-                <li>Save & share</li>
-              </ul>
-            </CardContent>
-          </Card>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Utilization Heatmap</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <ul className="list-disc list-inside space-y-1">
-                <li>Week view</li>
-                <li>Idle gaps</li>
-                <li>Zoom</li>
-                <li>Filter by line/machine</li>
-                <li>Color by status</li>
-              </ul>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Setup Calendar</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <ul className="list-disc list-inside space-y-1">
-                <li>Mold availability</li>
-                <li>Maintenance windows</li>
-                <li>Clash alerts</li>
-                <li>Crew view</li>
-              </ul>
-            </CardContent>
-          </Card>
-        </div>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Notes</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ul className="list-disc list-inside space-y-1">
-              <li>One-glance health</li>
-              <li>AI brief</li>
-              <li>Links to details via cards</li>
-              <li>Exports</li>
-              <li>Comments</li>
-              <li>Owners</li>
-              <li>Confidence badges</li>
-            </ul>
-          </CardContent>
-        </Card>
+    <DashboardLayout>
+       <div className="p-6">
+      <h1 className="text-3xl font-bold text-text-dark mb-1">Scheduler</h1>
+      <p className="text-text-light mb-6">Constraint-aware planning and scenario modeling</p>
+      
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4 mb-6">
+         <KPICard title="Schedule Adherence" value="98.2%" change="↑ 1.2%" isPositive={true}>
+            <FaTasks className="text-green-500" />
+          </KPICard>
+          <KPICard title="Constraint Violations" value="3" change="↑ 1" isPositive={false}>
+            <FaExclamationCircle className="text-red-500" />
+          </KPICard>
+          <KPICard title="Plan Achievement" value="95.5%" change="↓ 0.5%" isPositive={false}>
+            <FaBullseye className="text-orange-500" />
+          </KPICard>
+          <KPICard title="Overall Utilization" value="85.0%" change="↑ 3.0%" isPositive={true}>
+            <FaChartPie className="text-primary-blue" />
+          </KPICard>
       </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-2 flex flex-col gap-6">
+          <ChartCard title="Utilization Heatmap (Week View)">
+            <UtilizationChart data={utilizationData} />
+          </ChartCard>
+          <NotesSection />
+        </div>
+        <div className="lg:col-span-1 flex flex-col gap-6">
+          <ChartCard title="Setup Calendar (Clash Alerts)">
+            <AlertList alerts={clashAlerts} />
+          </ChartCard>
+          <ChartCard title="Scenario Planning">
+            <div className="space-y-3 text-center">
+              <button className="w-full p-3 bg-blue-100 text-primary-blue font-semibold rounded-md hover:bg-blue-200">Compare A/B Scenarios</button>
+              <button className="w-full p-3 bg-gray-100 text-text-dark font-medium rounded-md hover:bg-gray-200">Simulate Holiday Surge</button>
+              <button className="w-full p-3 bg-gray-100 text-text-dark font-medium rounded-md hover:bg-gray-200">Model Subcontract Impact</button>
+            </div>
+          </ChartCard>
+        </div>
+      </div>
+    </div>
     </DashboardLayout>
+   
   );
 };
 
-export default Scheduler;
+export default SchedulerDashboard;

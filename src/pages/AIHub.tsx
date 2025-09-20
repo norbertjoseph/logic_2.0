@@ -1,92 +1,64 @@
-import DashboardLayout from "@/components/DashboardLayout";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import React from 'react';
+import KPICard from '../components/KPICard';
+import ChartCard from '../components/ChartCard';
+import NotesSection from '../components/NotesSection';
+import PredictiveSignalChart from '../components/PredictiveSignalChart';
+import CEOBriefCard from '../components/CEOBriefCard';
+import { FaBrain, FaPlayCircle, FaUserShield, FaCheck } from 'react-icons/fa';
+import { predictiveSignalsData } from '../mockData';
+import DashboardLayout from '@/components/DashboardLayout';
 
-const AIHub = () => {
+const AIHubDashboard: React.FC = () => {
   return (
-    <DashboardLayout title="AI Hub">
-      <div className="flex-1 p-6 bg-white">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>60-sec CEO Brief</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <ul className="list-disc list-inside space-y-1">
-                <li>Daily summary</li>
-                <li>Risks</li>
-                <li>3 actions</li>
-                <li>Explainable bullets with links</li>
-                <li>Send via Email/WhatsApp</li>
-              </ul>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Operator Copilot</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <ul className="list-disc list-inside space-y-1">
-                <li>Guided downtime capture</li>
-                <li>Hints</li>
-                <li>Photo/voice input</li>
-                <li>Multilingual</li>
-                <li>Prompt templates</li>
-              </ul>
-            </CardContent>
-          </Card>
-        </div>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Predictive Signals</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <ul className="list-disc list-inside space-y-1">
-                <li>OEE/downtime/quality anomalies</li>
-                <li>Confidence</li>
-                <li>Snooze</li>
-                <li>Root-cause links</li>
-              </ul>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>What-if Simulator</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <ul className="list-disc list-inside space-y-1">
-                <li>Changeover reduction</li>
-                <li>Extra crew</li>
-                <li>Machine fix</li>
-                <li>Projected OEE/output delta</li>
-                <li>Save/compare scenarios</li>
-              </ul>
-            </CardContent>
-          </Card>
-        </div>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Notes</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ul className="list-disc list-inside space-y-1">
-              <li>One-glance health</li>
-              <li>AI brief</li>
-              <li>Links to details via cards</li>
-              <li>Exports</li>
-              <li>Comments</li>
-              <li>Owners</li>
-              <li>Confidence badges</li>
-            </ul>
-          </CardContent>
-        </Card>
+    <DashboardLayout>
+      <div className="p-6">
+      <h1 className="text-3xl font-bold text-text-dark mb-1">AI Hub</h1>
+      <p className="text-text-light mb-6">Centralized intelligence for proactive decision-making</p>
+      
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4 mb-6">
+         <KPICard title="Active Predictions" value="14" change="↑ 3" isPositive={true}>
+            <FaBrain className="text-primary-blue" />
+          </KPICard>
+          <KPICard title="Generated Scenarios" value="6" change="↑ 1" isPositive={true}>
+            <FaPlayCircle className="text-opportunity-green" />
+          </KPICard>
+          <KPICard title="Copilot Assists" value="128" change="↑ 22" isPositive={true}>
+            <FaUserShield className="text-orange-500" />
+          </KPICard>
+          <KPICard title="Avg. Model Confidence" value="96.2%" change="↑ 0.8%" isPositive={true}>
+            <FaCheck className="text-green-500" />
+          </KPICard>
       </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="lg:col-span-2 flex flex-col gap-6">
+          <ChartCard title="Predictive Signals (OEE/Downtime/Quality Anomaly)">
+            <PredictiveSignalChart data={predictiveSignalsData} />
+          </ChartCard>
+          <NotesSection />
+        </div>
+
+        <div className="lg:col-span-1 flex flex-col gap-6">
+          <CEOBriefCard />
+          <ChartCard title="What-if Simulator">
+            <div className="space-y-3 text-sm">
+                <p className="text-text-light">Select a scenario to model its impact on OEE and output.</p>
+                <select className="w-full p-2 border border-border-color rounded-md bg-white">
+                    <option>Simulate: Changeover Reduction</option>
+                    <option>Simulate: Add Extra Crew</option>
+                    <option>Simulate: Machine Fix</option>
+                </select>
+                <button className="w-full p-3 bg-primary-blue text-white font-semibold rounded-md hover:bg-blue-700">
+                    Run Simulation
+                </button>
+            </div>
+          </ChartCard>
+        </div>
+      </div>
+    </div>
     </DashboardLayout>
+    
   );
 };
 
-export default AIHub;
+export default AIHubDashboard;
